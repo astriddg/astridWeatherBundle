@@ -1,0 +1,13 @@
+{% extends "astridWeatherBundle::layout.html.twig" %}
+
+{% block body %}
+<h1> {{ weather.city.name }}</h1>
+
+<p> Weather: <strong> {{ weather.conditions}}</strong> </p>
+<p> The temperature, right now, is <strong> {{ weather.temperature}}ºC</strong> </p>
+<p> The humidity is <strong> {{ weather.humidity}}%</strong> </p>
+<img src="{{ asset(image) }}" style="height: 300px" >
+
+
+
+{% endblock %}

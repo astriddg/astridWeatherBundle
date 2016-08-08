@@ -1,0 +1,20 @@
+astrid_weather_homepage:
+    path:     /
+    defaults: { _controller: astridWeatherBundle:Weather:index }
+
+astrid_weather_idweather:
+    path:     /idweather/{id}
+    defaults: { _controller: astridWeatherBundle:Weather:idWeather }
+
+astrid_weather_newcity:
+    path:     /newcity
+    defaults: { _controller: astridWeatherBundle:Weather:nameWeather }
+
+
+astrid_weather_geoloc:
+    path:     /geoloc
+    defaults: { _controller: astridWeatherBundle:Weather:coordWeather }
+
+astrid_weather_delete:
+    path:     /delete/{id}
+    defaults: { _controller: astridWeatherBundle:Weather:delete }
