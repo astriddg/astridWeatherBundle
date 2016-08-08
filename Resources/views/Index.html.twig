@@ -13,7 +13,7 @@
 </ul>
 
 <p> Your city is not in this list? Either enter a new city name or get the current weather for where you are. </p>
-<a href="{{ path('astrid_weather_newcity') }}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span> Enter a new city</a> <a id="geoloc" href="{{ path('astrid_weather_geoloc', {'lat': 'latitude', 'long': 'longitude'}) }}" class="btn btn-success btn-sm" onClick="changeUrl()" ><span class="glyphicon glyphicon-screenshot" ></span> Find your local weather</a> 
+<a href="{{ path('astrid_weather_newcity') }}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus"></span> Enter a new city</a> <a id="geoloc" href="{{ path('astrid_weather_geoloc', {'lat': 'latitude', 'long': 'longitude'}) }}" class="btn btn-success btn-sm" ><span class="glyphicon glyphicon-screenshot" ></span> Find your local weather</a> 
 
 
 
@@ -31,6 +31,7 @@ function getLocation() {
         navigator.geolocation.getCurrentPosition(function(position) {
         	href = href.replace('latitude', position.coords.latitude);
         	href = href.replace('longitude', position.coords.longitude);
+            geo.setAttribute('href', href);
         });
     } else {
         alert('your geolocalisation is unavailable..');
@@ -39,9 +40,6 @@ function getLocation() {
 
 window.onload = getLocation();
 
-function changeUrl() {
-	window.location.replace(href);
-}
 
 
 

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use astrid\WeatherBundle\Entity\City;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use astrid\WeatherBundle\Exceptions\CityDuplicateException;
 
 
 class WeatherController extends Controller
@@ -70,34 +71,29 @@ class WeatherController extends Controller
     public function coordWeatherAction(Request $request) {
 
     	$latitude = $_GET['lat'];
-    	$longitude = $_GET['long'];
-
-    	$city = $this->getDoctrine()
-    		->getManager()
-    		->getRepository('astridWeatherBundle:City')
-    		->findOneBy(array('latitude' => $latitude, 'longitude' => $longitude));
-
-
-    	if($city == false) 
-    	{
-    		$city = new City();
-    		$city->setLatitude($latitude);
-    		$city->setLongitude($longitude);
-    		$false = true; // since we're setting city to something other than false, we can no longer rely on this condition to carry on
-    	}                  // hydrating it. So we have to create a $false variable.
+    	$longitude = $_GET['long'];            
 
 		$weatherConnect = $this->get('astrid_weather.owaconnect.weather');
-		$apiResponse = $weatherConnect->getWeatherCoord($city->getLatitude(), $city->getLongitude());
+		$apiResponse = $weatherConnect->getWeatherCoord($latitude, $longitude);
 
-		if($false) // or null?? 
-    	{
-    		$city->setOwaId($apiResponse['id']);
-    		$city->setName($apiResponse['name']);
-    		$em = $this->getDoctrine()->getManager();
-		    $em->persist($city);
-		    $em->flush();
-		    print_r('toubidou!!');
-    	}
+        $city = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('astridWeatherBundle:City')
+            ->findOneBy(array('owaId' => $apiResponse['id']));
+
+        var_dump($city);
+        if($city == false) 
+        {
+            $city = new City();
+            $city->setLatitude($latitude);
+            $city->setLongitude($longitude);
+            $city->setOwaId($apiResponse['id']);
+            $city->setName($apiResponse['name']);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($city);
+            $em->flush();
+        }
+
     		
     	$cacher = $this->get('astrid_weather.cacher');
 		$weather = $cacher->createCache($apiResponse, $city);
@@ -113,8 +109,9 @@ class WeatherController extends Controller
     		$cacher = $this->get('astrid_weather.cacher'); // check that this city really does exist.
     		$weather = $cacher->cacheExists($city); // check if there are caches associated with it.
 
-    		if ($weather) { // if so, delete them.
+    		while($weather) { // if so, delete them.
     			$cacher->deleteCache($weather);
+                $weather = $cacher->cacheExists($city);
     		}
 
     		$em = $this->getDoctrine()->getManager(); // delete the city
