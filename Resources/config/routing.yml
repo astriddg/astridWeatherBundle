@@ -18,3 +18,11 @@ astrid_weather_geoloc:
 astrid_weather_delete:
     path:     /delete/{id}
     defaults: { _controller: astridWeatherBundle:Weather:delete }
+
+astrid_weather_idforecast:
+    path:     /idforecast/{id}
+    defaults: { _controller: astridWeatherBundle:Forecast:idForecast }
+
+astrid_weather_geoloc_forecast:
+    path:     /geoloc-forecast
+    defaults: { _controller: astridWeatherBundle:Forecast:coordForecast }

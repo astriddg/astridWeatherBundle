@@ -6,7 +6,7 @@ use astrid\WeatherBundle\Services\OwaConnect;
 
 class OwaConnectForecast extends OwaConnect {
 
-	private $type = '/forecast';
+	public static $type = '/forecast';
 
 
 
@@ -14,20 +14,4 @@ class OwaConnectForecast extends OwaConnect {
 
 		parent::__construct($url, $apiKey);
 	}
-
-
-
-	public function getWeatherId($id) {
-
-	}
-
-	public function getWeatherName($name) {
-
-	}
-
-	public function getWeatherCoord($latitude, $longitude) {
-		
-	}
-
-	public function connectToApi($param)
 }

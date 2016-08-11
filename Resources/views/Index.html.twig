@@ -7,7 +7,7 @@
 <ul>
 
 	{% for city in cities %}
-		<li> {{ city.name }} <br><a href="{{ path('astrid_weather_idweather', {'id': city.id}) }} " class="btn btn-sm btn-info" >Today's weather</a> <a href="{{ path('astrid_weather_delete', {'id': city.id}) }}" class="btn btn-sm btn-danger" onclick="confirmDelete()" >Delete this city</a> </li>
+		<li> {{ city.name }} <br><a href="{{ path('astrid_weather_idweather', {'id': city.id}) }} " class="btn btn-sm btn-info" >Today's weather</a> <a href="{{ path('astrid_weather_idforecast', {'id': city.id}) }} " class="btn btn-sm btn-warning" >5-day forecast</a> <a href="{{ path('astrid_weather_delete', {'id': city.id}) }}" class="btn btn-sm btn-danger" onclick="confirmDelete()" >Delete this city</a> </li>
 	{% endfor %}
 
 </ul>
