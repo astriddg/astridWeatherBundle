@@ -55,7 +55,21 @@ class CachedWeather
      *
      * @ORM\Column(name="humidity", type="integer")
      */
-    private $humidity;   
+    private $humidity;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="day", type="integer", nullable = true)
+     */
+    private $day;  
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="date", type="datetime", nullable = true)
+     */
+    private $date;  
 
     public function __construct() {
         $this->creationDate = new \DateTime();
@@ -214,5 +228,53 @@ class CachedWeather
     public function getHumidity()
     {
         return $this->humidity;
+    }
+
+    /**
+     * Set day
+     *
+     * @param integer $day
+     *
+     * @return CachedWeather
+     */
+    public function setDay($day)
+    {
+        $this->day = $day;
+
+        return $this;
+    }
+
+    /**
+     * Get day
+     *
+     * @return integer
+     */
+    public function getDay()
+    {
+        return $this->day;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return CachedWeather
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }

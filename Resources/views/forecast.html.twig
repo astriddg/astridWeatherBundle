@@ -1,0 +1,49 @@
+{% extends "astridWeatherBundle::layout.html.twig" %}
+
+{% block body %}
+<h1> {{ weather[0].city.name }}</h1>
+
+{% for key, weather in weather %}
+<div id="{{ key }}" style="display:none" >
+<h2> {{days[key]}} </h2>
+<p> Weather: <strong> {{ weather.conditions}}</strong> </p>
+<p> Temeperature: <strong> {{ weather.temperature}}ºC</strong> </p>
+<p> Humidity <strong> {{ weather.humidity}}%</strong> </p>
+<img src="{{ asset(images[key]) }}" style="height: 300px" >
+</div>
+{% endfor %}
+
+<input type="range" id="forecast-slider" min="0" max="4" value="0" step="1" />
+
+{% endblock %}
+
+{% block range %}
+
+<script>
+
+$(function() {
+
+	function showfirst() {
+		$('#0').show();
+	}
+
+	$(document).onload = showfirst();
+
+	$('#forecast-slider').on("focusin", function() {
+		$(this).data('val', $(this).val());
+});
+	$('#forecast-slider').on("change", function() {
+		var prev = $(this).data('val');
+		$(this).data('val', $(this).val());
+		var val = $(this).val();
+		$('#'+prev).hide();
+		$('#'+val).show();   
+});
+
+	});
+
+
+ </script>
+
+
+{% endblock %}

@@ -2,7 +2,14 @@ services:
     astrid_weather.owaconnect.weather:
         class: astrid\WeatherBundle\Services\OwaConnectWeather
         arguments: ['http://api.openweathermap.org/data/2.5', 'fc574f7309d6f37ce3db4a5750e5b1ce']
+    astrid_weather.owaconnect.forecast:
+        class: astrid\WeatherBundle\Services\OwaConnectForecast
+        arguments: ['http://api.openweathermap.org/data/2.5', 'fc574f7309d6f37ce3db4a5750e5b1ce']
     astrid_weather.cacher:
         class: astrid\WeatherBundle\Services\Cacher
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+    astrid_weather.forecastcacher:
+        class: astrid\WeatherBundle\Services\ForecastCacher
         arguments: 
             - "@doctrine.orm.entity_manager"

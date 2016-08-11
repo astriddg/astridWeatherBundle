@@ -15,11 +15,44 @@ abstract class OwaConnect {
 
 
 
-	abstract public function getWeatherId($id) ;
+	public function getWeatherId($id) {
+		// integer test
+		$param = '?id='.$id;
+		return $this->connectToApi($param);
+	}
 
-	abstract public function getWeatherName($name) ;
+	public function getWeatherName($name) {
+		// strlength
+		$name = str_replace(' ', '', $name); // for city names with spaces. E.g. New York
+		$name = normalizer_normalize ($name);
 
-	abstract public function getWeatherCoord($latitude, $longitude) ;
+		$param = '?q='.$name;
+		return $this->connectToApi($param);
+	}
 
-	abstract public function connectToApi($param) ;
+	public function getWeatherCoord($latitude, $longitude) {
+		// integer test
+
+		$param = '?lat='.$latitude.'&lon='.$longitude ;
+		return $this->connectToApi($param);
+
+
+	}
+
+	public function connectToApi($param) {
+		$apiUrl = $this->url.static::$type.$param.$this->apiKey;
+
+		$apiResponse = file_get_contents($apiUrl);
+		$apiResponse = json_decode($apiResponse, true);
+
+
+		if ($apiResponse['cod'] == 200) {
+			return $apiResponse;
+		}
+		else {
+			return false;
+		}
+		
+
+	}
 }

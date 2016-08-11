@@ -6,8 +6,9 @@ use astrid\WeatherBundle\Entity\CachedWeather;
 use astrid\WeatherBundle\Entity\City;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use astrid\WeatherBundle\Services\Cacher;
 
-class Cacher {
+class ForecastCacher extends Cacher {
 
 	private $lapse = '1 hour';
 
@@ -25,22 +26,25 @@ class Cacher {
 
 	public function cacheExists(City $city) {
 
-		$cache = $this->em
+		$caches = $this->em
     		->getRepository('astridWeatherBundle:CachedWeather')
-    		->findOneBy(array('city' => $city));
+    		->findCachedForecast($city);
 
-    	if (!$cache == NULL) {
-    		if($this->cacheValid($cache)) {
+    	if (!$caches == NULL) {
+    		if($this->cacheValid($caches)) {
     			return $cache;
     		}
-    		$this->deleteCache($cache);
+    		foreach($cache as $cache) {
+    			$this->deleteCache($cache);
+    		}
     		return false;
     	}
     	return false;
 	}
 
-	public function cacheValid($cache) {
+	public function cacheValid($caches) {
 
+		$cache = $caches[0];
 		$expiryDate = date_add($cache->getCreationDate(), date_interval_create_from_date_string($this->lapse));
 		$now = new \Datetime;
 
@@ -55,18 +59,29 @@ class Cacher {
 		$this->em->flush();
 	}
 
+
 	public function createCache($apiResponse, City $city) {
-		$cache = new CachedWeather();
-		$cache->setCity($city);
-		$cache->setConditions($apiResponse['weather'][0]['main']);
-		$cache->setTemperature($apiResponse['main']['temp']-273);
-		$cache->setHumidity($apiResponse['main']['humidity']);
-	    $this->em->persist($cache);
+
+		$forecast = [];
+		for ($i = 0; $i < 5; $i++) {
+			$j = $i*8;
+			$cache = new CachedWeather();
+			$time = new \Datetime($apiResponse['list'][$j]['dt_txt']);
+			$cache->setCity($city);
+			$cache->setConditions($apiResponse['list'][$j]['weather'][0]['main']);
+			$cache->setTemperature($apiResponse['list'][$j]['main']['temp']-273);
+			$cache->setHumidity($apiResponse['list'][$j]['main']['humidity']);
+			$cache->setDate($time);
+			$cache->setDay('f'.$i);
+			$this->em->persist($cache);
+			$forecast[] = $cache;
+		}
+	    
 	    $this->em->flush();
-		return $cache;
+
+
+		return $forecast;
 	}
-
-
 
 
 }
