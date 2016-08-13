@@ -114,6 +114,14 @@ class WeatherController extends Controller
                 $weather = $cacher->cacheExists($city);
     		}
 
+            $cacher = $this->get('astrid_weather.forecastcacher'); // check that this city really does exist.
+            $weather = $cacher->cacheExists($city); // check if there are caches associated with it.
+
+            while($weather) { // if so, delete them.
+                $cacher->deleteCache($weather);
+                $weather = $cacher->cacheExists($city);
+            }
+
     		$em = $this->getDoctrine()->getManager(); // delete the city
 		    $em->remove($city);
 		    $em->flush();

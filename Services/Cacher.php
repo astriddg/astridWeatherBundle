@@ -61,6 +61,7 @@ class Cacher {
 		$cache->setConditions($apiResponse['weather'][0]['main']);
 		$cache->setTemperature($apiResponse['main']['temp']-273);
 		$cache->setHumidity($apiResponse['main']['humidity']);
+		$cache->setDay('w');
 	    $this->em->persist($cache);
 	    $this->em->flush();
 		return $cache;

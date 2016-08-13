@@ -32,9 +32,9 @@ class ForecastCacher extends Cacher {
 
     	if (!$caches == NULL) {
     		if($this->cacheValid($caches)) {
-    			return $cache;
+    			return $caches;
     		}
-    		foreach($cache as $cache) {
+    		foreach($caches as $cache) {
     			$this->deleteCache($cache);
     		}
     		return false;
@@ -72,7 +72,7 @@ class ForecastCacher extends Cacher {
 			$cache->setTemperature($apiResponse['list'][$j]['main']['temp']-273);
 			$cache->setHumidity($apiResponse['list'][$j]['main']['humidity']);
 			$cache->setDate($time);
-			$cache->setDay('f'.$i);
+			$cache->setDay('f' . $i);
 			$this->em->persist($cache);
 			$forecast[] = $cache;
 		}

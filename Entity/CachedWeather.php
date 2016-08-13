@@ -60,7 +60,7 @@ class CachedWeather
     /**
      * @var int
      *
-     * @ORM\Column(name="day", type="integer", nullable = true)
+     * @ORM\Column(name="day", type="string", nullable = false)
      */
     private $day;  
 

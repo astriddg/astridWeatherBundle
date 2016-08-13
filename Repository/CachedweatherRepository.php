@@ -22,4 +22,14 @@ class CachedweatherRepository extends EntityRepository
 
 		return $qb->getQuery()->getResult();
 	}
+
+	public function findCachedWeather(City $city) {
+		$qb = $this->createQueryBuilder('c');
+
+		$qb->where('c.city = :city')
+			->setParameter('city', $city)
+			->andWhere('c.day = w');
+
+		return $qb->getQuery()->getResult();
+	}
 }
