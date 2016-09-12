@@ -47,7 +47,6 @@ class ForecastController extends Controller
             ->getRepository('astridWeatherBundle:City')
             ->findOneBy(array('owaId' => $apiResponse['id']));
 
-        var_dump($city);
         if($city == false) 
         {
             $city = new City();
@@ -72,28 +71,27 @@ class ForecastController extends Controller
 
 
 
-        public function getImage($forecast) {
-            $images = [];
+    public function getImage($forecast) {
+        $images = [];
 
-            foreach($forecast as $forecast) {
-                switch($forecast->getConditions()) { // load different images depending on weather.
-                case 'Clear':
-                    $images[] = 'bundles/astridweather/images/clear.jpg'; 
-                break;
-                case 'Clouds':
-                    $images[] = 'bundles/astridweather/images/clouds.jpg'; 
-                break;
-                case 'Rain':
-                    $images[] = 'bundles/astridweather/images/rain.jpg'; 
-                break;
-                case 'Snow':
-                    $images[] = 'bundles/astridweather/images/snow.jpg'; 
-                break;
-                }
+        foreach($forecast as $forecast) {
+            switch($forecast->getConditions()) { // load different images depending on weather.
+            case 'Clear':
+                $images[] = 'bundles/astridweather/images/clear.jpg'; 
+            break;
+            case 'Clouds':
+                $images[] = 'bundles/astridweather/images/clouds.jpg'; 
+            break;
+            case 'Rain':
+                $images[] = 'bundles/astridweather/images/rain.jpg'; 
+            break;
+            case 'Snow':
+                $images[] = 'bundles/astridweather/images/snow.jpg'; 
+            break;
             }
+        }
 
-            return $images;
-
+        return $images;
 
 
     }

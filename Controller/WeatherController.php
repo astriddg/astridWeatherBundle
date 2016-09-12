@@ -64,7 +64,7 @@ class WeatherController extends Controller
 
     	}
     	return $this->render('astridWeatherBundle::add.html.twig', array(
-      'form' => $form->createView(),
+        'form' => $form->createView(),
     	));
     }
 
@@ -81,7 +81,6 @@ class WeatherController extends Controller
             ->getRepository('astridWeatherBundle:City')
             ->findOneBy(array('owaId' => $apiResponse['id']));
 
-        var_dump($city);
         if($city == false) 
         {
             $city = new City();
@@ -104,33 +103,33 @@ class WeatherController extends Controller
 
     	}
 
-    	public function deleteAction(City $city) {
+	public function deleteAction(City $city) {
 
-    		$cacher = $this->get('astrid_weather.cacher'); // check that this city really does exist.
-    		$weather = $cacher->cacheExists($city); // check if there are caches associated with it.
+		$cacher = $this->get('astrid_weather.cacher'); // check that this city really does exist.
+		$weather = $cacher->cacheExists($city); // check if there are caches associated with it.
 
-    		while($weather) { // if so, delete them.
-    			$cacher->deleteCache($weather);
-                $weather = $cacher->cacheExists($city);
-    		}
+		while($weather) { // if so, delete them.
+			$cacher->deleteCache($weather);
+            $weather = $cacher->cacheExists($city);
+		}
 
-            $cacher = $this->get('astrid_weather.forecastcacher'); // check that this city really does exist.
-            $weather = $cacher->cacheExists($city); // check if there are caches associated with it.
+        $cacher = $this->get('astrid_weather.forecastcacher'); // check that this city really does exist.
+        $weather = $cacher->cacheExists($city); // check if there are caches associated with it.
 
-            while($weather) { // if so, delete them.
-                $cacher->deleteCache($weather);
-                $weather = $cacher->cacheExists($city);
-            }
+        while($weather) { // if so, delete them.
+            $cacher->deleteCache($weather);
+            $weather = $cacher->cacheExists($city);
+        }
 
-    		$em = $this->getDoctrine()->getManager(); // delete the city
-		    $em->remove($city);
-		    $em->flush();
+		$em = $this->getDoctrine()->getManager(); // delete the city
+	    $em->remove($city);
+	    $em->flush();
 
-		    $url = $this->get('router')->generate('astrid_weather_homepage'); // go back to homepage.
-    
-    		return new RedirectResponse($url);
+	    $url = $this->get('router')->generate('astrid_weather_homepage'); // go back to homepage.
 
-    	}
+		return new RedirectResponse($url);
+
+	}
 
     public function getImage($weather) {
     	switch($weather->getConditions()) { // load different images depending on weather.
